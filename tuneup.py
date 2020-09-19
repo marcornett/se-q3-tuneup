@@ -55,7 +55,7 @@ def read_movies(src):
 #     return False
 
 
-@profile
+# @profile
 def find_duplicate_movies(src):
     """Returns a list of duplicate movies from a src list."""
     movies = read_movies(src)
@@ -68,9 +68,9 @@ def find_duplicate_movies(src):
     return duplicates
 
 
-def timeit_helper(func):
+def timeit_helper(func, setup):
     """Part A: Obtain some profiling measurements using timeit."""
-    t = timeit.Timer(stmt=func, setup='pass')
+    t = timeit.Timer(stmt=func, setup=setup)
     run_times = 10
     result = t.repeat(repeat=7, number=run_times)
     average = min(result) / run_times
@@ -89,4 +89,5 @@ def main():
 if __name__ == '__main__':
     main()
 
-# timeit_helper('main()')
+# timeit_helper("find_duplicate_movies('movies.txt')",
+#               'from __main__ import find_duplicate_movies')
