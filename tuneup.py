@@ -20,8 +20,24 @@ def profile(func):
     # Be sure to review the lesson material on decorators.
     # You need to understand how they are constructed and used.
 
-    # cProfile.run(func())
-    raise NotImplementedError("Complete this decorator function")
+    # create inner function(*args, **kwargs)
+    def wrapper(*args, **kwargs):
+        # create cprofile object
+        pr = cProfile.Profile()
+        # enable cprofile
+        pr.enable()
+        # invoke func(*args, **kwargs)
+        result = func(*args, **kwargs)
+        # disable cprofile
+        pr.disable()
+        # sort stats by 'cumulative' time to see functions costing most time
+        sort_by = pstats.SortKey.CUMULATIVE
+        # use pstats, create stats object to collect statistics from cprofile
+        ps = pstats.Stats(pr).sort_stats(sort_by)
+        # print_stats() using stats object print function
+        ps.print_stats()
+        return result
+    return wrapper
 
 
 def read_movies(src):
@@ -31,21 +47,23 @@ def read_movies(src):
         return f.read().splitlines()
 
 
-def is_duplicate(title, movies):
-    """Returns True if title is within movies list."""
-    for movie in movies:
-        if movie.lower() == title.lower():
-            return True
-    return False
+# def is_duplicate(title, movies):
+#     """Returns True if title is within movies list."""
+#     for movie in movies:
+#         if movie.lower() == title.lower():
+#             return True
+#     return False
 
 
+@profile
 def find_duplicate_movies(src):
     """Returns a list of duplicate movies from a src list."""
     movies = read_movies(src)
     duplicates = []
     while movies:
         movie = movies.pop()
-        if is_duplicate(movie, movies):
+        if movie in movies:
+            # if is_duplicate(movie, movies):
             duplicates.append(movie)
     return duplicates
 
@@ -71,4 +89,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-timeit_helper('main()')
+# timeit_helper('main()')
