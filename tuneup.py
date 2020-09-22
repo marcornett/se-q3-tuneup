@@ -82,5 +82,5 @@ def main():
 if __name__ == '__main__':
     main()
 
-# timeit_helper("find_duplicate_movies('movies.txt')",
-#               'from __main__ import find_duplicate_movies')
+timeit_helper("find_duplicate_movies('movies.txt')",
+              'from __main__ import find_duplicate_movies')
